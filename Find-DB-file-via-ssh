@@ -1,0 +1,19 @@
+#!/bin/bash/
+
+userold=$1
+
+
+echo -e "\nOld User = $userold"
+
+
+echo -e "looking files that contain $userold\n"
+
+# find . -type f \( -iname \*.php -o -iname \*.cfg -o -iname \*.config -o -iname \.env \) -exec sed -i "s/$userold/$usernew/g" {} +
+
+grep -ohrl --include=*.{html,php,cfg,config} --include=.env $userold .
+
+echo -e "Done"
+
+rm -fv *_*.sh > /dev/null 2>&1
+rm "$0"  > /dev/null 2>&1
+rm -- "$0"  > /dev/null 2>&1
