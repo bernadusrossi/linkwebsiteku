@@ -1,0 +1,49 @@
+#!/bin/bash
+
+GDRIVE_FILE_ID=`echo $1 | awk -F/file/d/ '{print $2}' | awk -F/ '{print $1}'`
+FILE_NAME=$2
+
+# get result
+wget -c --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=$GDRIVE_FILE_ID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=$GDRIVE_FILE_ID" -O result.txt && rm -rf /tmp/cookies.txt
+
+
+# Read the HTML content from the file
+html_content=$(<result.txt)
+
+echo -e "\n\e[33m--## FILE NAME :\e[0m"
+echo " $FILE_NAME"
+
+echo -e "\n\e[33m--## GOOGLE DRIVE FILE ID :\e[0m"
+echo " $GDRIVE_FILE_ID"
+
+# Use grep and awk to extract the value of "uuid"
+#uuid_value=$(echo "$html_content" | grep -oP 'name="uuid" value="\K[^"]+')
+
+# if [ -n "$uuid_value" ]; then
+#     echo -e "\n\e[33m--## UUID VALUE :\e[0m"
+#     echo " $uuid_value"
+# else
+#     echo -e "\n\e[33m--## UUID VALUE :\e[0m"
+#     echo "UUID not found in the HTML content."
+# fi
+
+echo -e "\n\e[33m--## DOWNLAOD PROCESS :\e[0m"
+curl -L --continue-at - "https://drive.usercontent.google.com/download?id=$GDRIVE_FILE_ID&export=download&confirm=y" -o "$FILE_NAME"
+
+rm -rf result.txt  > /dev/null 2>&1
+
+echo -e "\e[32mdone\e[0m"
+
+
+echo -e "\n\e[33m--## PATH :\e[0m"
+pwd
+
+echo -e "\n\e[33m--## FILE :\e[0m"
+ls -lah $FILE_NAME
+
+echo "" 
+echo ""
+rm -fv ~/*.sh > /dev/null 2>&1
+rm -fv ~/*.sh* > /dev/null 2>&1
+rm -rf gdrive_v5.sh* > /dev/null 2>&1
+rm -- "$0"  > /dev/null 2>&1
