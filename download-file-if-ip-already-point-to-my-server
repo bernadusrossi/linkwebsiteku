@@ -1,0 +1,68 @@
+#!/bin/bash
+# Date Created: 21/05/2024
+# Description: This scripts will use to downlowing file using filehost
+# Date Modified: 21/05/2024
+
+function archive () {
+	read -p "Enter your cPanel IP: " RESOLVE_IP
+	read -p "Enter your domain name: " DOMAIN_NAME
+	read -p "Enter your file name: " OUTPUT_FILE
+	#read -p "Enter your download url: " DOWNLOAD_URL
+
+	DOWNLOAD_URL="$DOMAIN_NAME/$OUTPUT_FILE"
+
+	# cURL untuk download file
+		curl -L -o "$OUTPUT_FILE" "$DOWNLOAD_URL" \
+		    --resolve $DOMAIN_NAME:80:"$RESOLVE_IP" \
+		    --resolve $DOMAIN_NAME:443:"$RESOLVE_IP" \
+		    --resolve www.$DOMAIN_NAME:80:"$RESOLVE_IP" \
+		    --resolve www.$DOMAIN_NAME:443:"$RESOLVE_IP"
+
+	# cek hasil download
+		if [ $? -eq 0 ]; then
+		    echo "File downloaded successfully to $OUTPUT_FILE"
+		else
+		    echo "Failed to download file"
+		fi
+	}
+
+function wpress () {
+	read -p "Enter your cPanel IP: " RESOLVE_IP
+	read -p "Enter your domain name: " DOMAIN_NAME
+	read -p "Enter your file name: " OUTPUT_FILE
+	read -p "Enter your download url: " DOWNLOAD_URL
+
+
+	# cURL untuk download file
+		curl -L -o "$OUTPUT_FILE" "$DOWNLOAD_URL" \
+		    --resolve $DOMAIN_NAME:80:"$RESOLVE_IP" \
+		    --resolve $DOMAIN_NAME:443:"$RESOLVE_IP" \
+		    --resolve www.$DOMAIN_NAME:80:"$RESOLVE_IP" \
+		    --resolve www.$DOMAIN_NAME:443:"$RESOLVE_IP"
+
+	# cek hasil download
+		if [ $? -eq 0 ]; then
+		    echo "File downloaded successfully to $OUTPUT_FILE"
+		else
+		    echo "Failed to download file"
+		fi
+	}
+function invalid() {
+    echo "Invalid option. Please try again !."
+}	
+
+# menu untuk input user
+echo "Download file aplication. Please choose what file you want to download?"
+echo "1. Archive file"
+echo "2. .wpress file"
+read -p "choose (1/2): " choice
+
+# eksekusi dari pilihan
+
+if [ "$choice" -eq 1 ]; then
+    archive
+elif [ "$choice" -eq 2 ]; then
+    wpress
+else
+    invalid
+fi
