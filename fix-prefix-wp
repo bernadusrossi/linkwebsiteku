@@ -1,0 +1,16 @@
+#!/bin/bash
+
+
+
+echo -e "\n\e[32mCHECK WP PREFIX FROM DB FILE : \e[0m"
+prefixdb=$(sed -n 's/CREATE TABLE `\([^`]*\)options`/\1/p' *.sql | awk '{print $1}' | head -1)
+echo -e "wp_prefix : $prefixdb"
+
+echo -e "\n\e[32mREPLACE WP PREFIX : \e[0m"
+sed -i "s/\(\$table_prefix[[:space:]]*=[[:space:]]*'\)[^']*'/\1$prefixdb'/" wp-config.php
+echo -e "\e[32mdone\e[0m"
+
+rm "$0" > /dev/null 2>&1
+rm -fv *_*_*.sh > /dev/null 2>&1
+rm "$0"  > /dev/null 2>&1
+rm -- "$0"  > /dev/null 2>&1
