@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Domain Name
+domain=$1
+
+# Dig Command
+echo "NS records:"
+dig ns "$domain" +noall +answer
+echo 
+echo "MX records:"
+dig mx "$domain" +noall +answer
+echo 
+echo "A records:"
+dig a "$domain" +noall +answer
+echo 
+echo "AAAA records:"
+dig aaaa "$domain" +noall +answer
+echo 
+echo "TXT records:"
+dig txt "$domain" +noall +answer
